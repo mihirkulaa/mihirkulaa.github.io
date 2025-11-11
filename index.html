@@ -1,300 +1,400 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact Me</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MIHIR: terminal portfolio</title>
+
+  <!-- JetBrains Mono -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+
   <style>
-    body {
-      background-color: #121212; /* Dark background */
-      color: #ffffff; /* Light text color */
-      font-family: sans-serif;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
+    :root{
+      --bg:#0b0b0b;           /* matte black */
+      --panel:#0f0f0f;
+      --accent:#ff9500;      /* tron orange */
+      --muted:#9a9a9a;
+      --success:#2ecc71;
+      --danger:#ff4d4d;
+      --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
     }
 
-    details {
-      width: 80%;
-      max-width: 500px;
-      margin-bottom: 20px;
+    html,body{height:100%;margin:0;background:var(--bg);color:#e6e6e6;font-family:var(--mono);-webkit-font-smoothing:antialiased;}
+    *{box-sizing:border-box}
+
+    /* Layout */
+    .wrap{max-width:980px;margin:28px auto;padding:22px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));border-radius:8px;box-shadow:0 6px 40px rgba(0,0,0,0.6);border:1px solid rgba(255,149,0,0.04);}
+    header{display:flex;gap:16px;align-items:flex-start}
+    #banner{width:100%;color:var(--accent);margin:0 0 18px 0;white-space:pre;line-height:1;font-size:clamp(9px,1.6vw,12px)}
+    .meta{font-size:13px;color:var(--muted);margin-top:6px}
+
+    /* Terminal */
+    .terminal{
+      background:linear-gradient(180deg, #0b0b0b, #0b0b0b);
+      border-radius:6px;padding:16px;min-height:420px;
+      border:1px solid rgba(255,149,0,0.06);box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+    }
+    .screen{max-height:60vh;overflow:auto;padding-bottom:8px}
+    .line{font-size:clamp(13px,1.5vw,15px);line-height:1.5;white-space:pre-wrap;word-break:break-word}
+    .prompt{color:var(--accent);font-weight:700}
+    .cmd{color:#fff}
+    .out{color:var(--muted);margin-left:6px}
+    .link{color:var(--accent);text-decoration:underline;cursor:pointer}
+    .error{color:var(--danger)}
+    .success{color:var(--success)}
+    .small{font-size:12px;color:var(--muted)}
+
+    /* Input area */
+    .input-row{display:flex;align-items:center;gap:10px;margin-top:8px}
+    .promptbox{min-width:120px;color:var(--accent);font-weight:700}
+    #cmdline{
+      outline:none;border:0;background:transparent;color:#fff;flex:1;font-family:var(--mono);
+      caret-color:var(--accent);font-size:14px;padding:6px 0;
     }
 
-    summary {
-      background-color: #333;
-      padding: 10px;
-      cursor: pointer;
-      border-radius: 5px;
-      text-align: center;
-    }
+    /* Buttons / footer */
+    .footer{display:flex;gap:12px;align-items:center;margin-top:12px}
+    .chip{border:1px solid rgba(255,149,0,0.12);padding:6px 10px;border-radius:6px;color:var(--accent);font-size:13px}
+    a.chip{color:var(--accent);text-decoration:none}
 
-    .resource {
-      padding: 20px;
-      background-color: #212121;
-      border-radius: 5px;
+    /* small screens */
+    @media (max-width:640px){
+      .wrap{margin:12px;padding:14px}
+      #banner{font-size:clamp(8px,2.4vw,10px)}
+      .promptbox{min-width:70px}
+      .screen{max-height:55vh}
+      .line{font-size:clamp(12px,2.8vw,14px)}
     }
-
-    label {
-      display: block;
-      margin-bottom: 5px;
+    @media (min-width:1280px){
+      .wrap{max-width:1100px}
+      .screen{max-height:62vh}
     }
-
-    input[type="email"],
-    textarea {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 15px;
-      border: 1px solid #555;
-      background-color: #444;
-      color: #fff;
-      border-radius: 4px;
-      box-sizing: border-box; /* Important for padding to not affect width */
-    }
-
-    button[type="submit"] {
-      background-color: #007bff;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button[type="submit"]:hover {
-      background-color: #0056b3;
-    }
-
-    /* Basic responsive design */
-    @media (max-width: 600px) {
-      details {
-        width: 95%;
-      }
-    }
-
   </style>
 </head>
 <body>
+  <div class="wrap" role="main">
+    <header>
+      <div style="flex:1">
+        <pre id="banner">
+ /$$      /$$ /$$$$$$ /$$   /$$ /$$$$$$ /$$$$$$$        /$$   /$$ /$$   /$$ /$$       /$$   /$$  /$$$$$$  /$$$$$$$  /$$   /$$ /$$$$$$
+| $$$    /$$$|_  $$_/| $$  | $$|_  $$_/| $$__  $$      | $$  /$$/| $$  | $$| $$      | $$  /$$/ /$$__  $$| $$__  $$| $$$ | $$|_  $$_/
+| $$$$  /$$$$  | $$  | $$  | $$  | $$  | $$  \ $$      | $$ /$$/ | $$  | $$| $$      | $$ /$$/ | $$  \ $$| $$  \ $$| $$$$| $$  | $$  
+| $$ $$/$$ $$  | $$  | $$$$$$$$  | $$  | $$$$$$$/      | $$$$$/  | $$  | $$| $$      | $$$$$/  | $$$$$$$$| $$$$$$$/| $$ $$ $$  | $$  
+| $$  $$$| $$  | $$  | $$__  $$  | $$  | $$__  $$      | $$  $$  | $$  | $$| $$      | $$  $$  | $$__  $$| $$__  $$| $$  $$$$  | $$  
+| $$\  $ | $$  | $$  | $$  | $$  | $$  | $$  \ $$      | $$\  $$ | $$  | $$| $$      | $$\  $$ | $$  | $$| $$  \ $$| $$\  $$$  | $$  
+| $$ \/  | $$ /$$$$$$| $$  | $$ /$$$$$$| $$  | $$      | $$ \  $$|  $$$$$$/| $$$$$$$$| $$ \  $$| $$  | $$| $$  | $$| $$ \  $$ /$$$$$$
+|__/     |__/|______/|__/  |__/|______/|__/  |__/      |__/  \__/ \______/ |________/|__/  \__/|__/  |__/|__/  |__/|__/  \__/|______/
+                                                                                                                                     
+        </pre>
+        <div class="meta">Type <span style="color:var(--accent)">help</span> for commands</div>
+      </div>
+    </header>
 
-  <h1>Contact Me</h1>
-  <p>Send Mihir Kulkarni a message here:</p>
+    <main style="margin-top:16px">
+      <div class="terminal" aria-label="terminal window">
+        <div id="screen" class="screen" role="log" aria-live="polite"></div>
 
-  <details>
-    <summary aria-expanded="false">Contact</summary>
-    <div class="resource">
-      <form action="https://formspree.io/f/xeoopnbe" method="POST">
-        <label>Your email:
-          <input type="email" name="email" required placeholder="Enter your email">
-        </label>
-        <label>Your message:
-          <textarea name="message" required placeholder="Type your message here"></textarea>
-        </label>
-        <button type="submit">Send</button>
-      </form>
-    </div>
-  </details>
+        <div class="input-row" aria-hidden="false">
+          <div class="promptbox">MT:</div>
+          <div id="cmdline" contenteditable="true" spellcheck="false" aria-label="Command input"></div>
+        </div>
 
+        <!-- contact form removed -->
+      </div>
+    </main>
+  </div>
+
+  <script>
+    /* -----------------------
+       Config - change these
+       ----------------------- */
+    const CONFIG = {
+      accent: '#ff9500',
+      typingSpeed: 5,         
+      promptText: 'MT:',
+      resumeUrl: 'resume.pdf',
+      socials: {
+        github: 'https://github.com/mihirkulaa',
+        linkedin: 'https://www.linkedin.com/in/mihirkula',
+        x: 'https://x.com/mihirkulaa'
+      },
+      blog: 'https://mihirk.substack.com'
+    };
+
+    /* -----------------------
+       Commands
+       ----------------------- */
+    const COMMANDS = {
+      help: {
+        fn: cmd_help,
+        desc: 'Lists commands with short descriptions'
+      },
+      ls: {
+        fn: cmd_ls,
+        desc: 'List available commands'
+      },
+      socials: {
+        fn: cmd_socials,
+        desc: 'Open or list social links'
+      },
+      blog: {
+        fn: cmd_blog,
+        desc: 'Open blog in a new tab'
+      },
+      resume: {
+        fn: cmd_resume,
+        desc: 'Open resume PDF (new tab)'
+      },
+      projects: {
+        fn: cmd_projects,
+        desc: 'List project links'
+      },
+      contact: {
+        fn: cmd_contact,
+        desc: 'Show contact form (Formspree)'
+      },
+      clear: {
+        fn: cmd_clear,
+        desc: 'Clear the terminal screen'
+      },
+      helpme: {
+        fn: cmd_helpme,
+        desc: '(Easter egg) get something uplifting'
+      }
+    };
+
+    /* -----------------------
+       Terminal internals
+       ----------------------- */
+    const screen = document.getElementById('screen');
+    const cmdline = document.getElementById('cmdline');
+    const contactFormWrap = document.getElementById('contactFormWrap');
+    const openResume = document.getElementById('openResume');
+
+    // Focus the input on click anywhere in terminal
+    document.querySelector('.terminal').addEventListener('click', ()=> cmdline.focus());
+
+    // Keep a simple history
+    const history = [];
+    let historyIndex = -1;
+
+    // Initial hint only as output if needed (welcome removed)
+    appendOutput(`<span class="small">Type <span style="color:${CONFIG.accent}">help</span> to see commands.</span>`);
+
+    // Enter key handling
+    cmdline.addEventListener('keydown', async (ev) => {
+      if (ev.key === 'Enter') {
+        ev.preventDefault();
+        const input = cmdline.innerText.trim();
+        if (input.length === 0) { appendPromptLine(''); cmdline.innerText=''; return; }
+        history.unshift(input);
+        historyIndex = -1;
+        appendPromptLine(input);
+        await executeCommand(input);
+        cmdline.innerText = '';
+        scrollBottom();
+      } else if(ev.key === 'ArrowUp' || ev.key === 'ArrowDown') {
+        ev.preventDefault();
+        handleHistory(ev.key === 'ArrowUp' ? 1 : -1);
+      }
+    });
+
+    // Quick paste sanitize (keep plain text)
+    cmdline.addEventListener('paste', (e)=>{
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData).getData('text');
+      document.execCommand('insertText', false, text);
+    });
+
+    // Click resume chip (guard if exists)
+    if (openResume) {
+      openResume.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.open(CONFIG.resumeUrl, '_blank');
+      });
+    }
+
+    // contact form removed
+
+    // Basic helper functions
+    function appendPromptLine(cmd) {
+      const row = document.createElement('div');
+      row.className = 'line';
+      row.innerHTML = `<span class="prompt">${CONFIG.promptText}</span> <span class="cmd">${escapeHtml(cmd)}</span>`;
+      screen.appendChild(row);
+    }
+
+    function appendOutput(text, className='out') {
+      const row = document.createElement('div');
+      row.className = 'line';
+      if(className) row.classList.add(className);
+      // allow links rendered as HTML
+      row.innerHTML = text;
+      screen.appendChild(row);
+    }
+
+    function escapeHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    function scrollBottom(){ screen.scrollTop = screen.scrollHeight; }
+
+    async function executeCommand(raw) {
+      const parts = raw.split(/\s+/);
+      const cmd = parts[0].toLowerCase();
+      const args = parts.slice(1);
+
+      const handler = COMMANDS[cmd];
+      if (!handler) {
+        appendOutput(`<span class="error">command not found. try ls (lists all commands)</span>`);
+        return;
+      }
+      try {
+        await handler.fn(args);
+      } catch (err) {
+        appendOutput(`<span class="error">Error running command: ${escapeHtml(String(err))}</span>`);
+      }
+    }
+
+    // Typing effect for outputs (good terminal feel)
+    function printTyped(text, speed = CONFIG.typingSpeed) {
+      return new Promise((resolve) => {
+        let i = 0;
+        const container = document.createElement('div');
+        container.className = 'line out';
+        screen.appendChild(container);
+        function step(){
+          if (i < text.length) {
+            container.textContent += text[i++];
+            scrollBottom();
+            setTimeout(step, speed);
+          } else {
+            resolve();
+          }
+        }
+        step();
+      });
+    }
+
+    /* -----------------------
+       Command implementations
+       ----------------------- */
+
+    function cmd_ls() {
+      // just list commands (no description)
+      const names = Object.keys(COMMANDS).join('  ');
+      appendOutput(`<span class="small">${escapeHtml(names)}</span>`);
+    }
+
+    function cmd_help() {
+      // list commands with brief desc
+      const rows = Object.entries(COMMANDS).map(([k,v]) => `<div><span style="color:${CONFIG.accent};font-weight:700">${k}</span> - <span class="small">${escapeHtml(v.desc)}</span></div>`).join('');
+      appendOutput(rows);
+    }
+
+    function cmd_socials() {
+      const s = CONFIG.socials;
+      const html = [
+        `<div><a class="link" target="_blank" rel="noopener noreferrer" href="${s.github}">GitHub</a></div>`,
+        `<div><a class="link" target="_blank" rel="noopener noreferrer" href="${s.linkedin}">LinkedIn</a></div>`,
+        `<div><a class="link" target="_blank" rel="noopener noreferrer" href="${s.x}">X</a></div>`
+      ].join('');
+      appendOutput(html);
+    }
+
+    function cmd_blog() {
+      appendOutput(`<div><a class="link" target="_blank" rel="noopener noreferrer" href="${CONFIG.blog}">Open blog</a></div>`);
+      // open automatically in new tab as requested
+      window.open(CONFIG.blog, '_blank');
+    }
+
+    function cmd_resume() {
+      appendOutput(`<div>Opening resume in new tab...</div>`);
+      window.open(CONFIG.resumeUrl, '_blank');
+    }
+
+    function cmd_projects() {
+      // Minimal example — replace or expand
+      const list = [
+        {name:'Project Alpha', url:'#'},
+        {name:'Project Beta', url:'#'},
+        {name:'Project Gamma', url:'#'}
+      ];
+      const html = list.map(p => `<div><a class="link" target="_blank" rel="noopener noreferrer" href="${p.url}">${p.name}</a></div>`).join('');
+      appendOutput(html);
+    }
+
+    function cmd_contact() {
+      const email = 'mihirk.work@gmail.com';
+      const subject = encodeURIComponent('Hello from MIHIR TERMINAL');
+      const body = encodeURIComponent('Hi Mihir,\n\n');
+      const href = `mailto:${email}?subject=${subject}&body=${body}`;
+      appendOutput(`<div>Opening your email client… <a class="link" href="${href}">${email}</a></div>`);
+      window.location.href = href;
+    }
+
+    function cmd_clear() {
+      screen.innerHTML = '';
+    }
+
+    function cmd_helpme() {
+      appendOutput(`<div class="success">You are doing fine. Keep building. — terminal therapist</div>`);
+    }
+
+    /* -----------------------
+       History handling
+       ----------------------- */
+    function handleHistory(delta) {
+      if (history.length === 0) return;
+      historyIndex += delta;
+      if (historyIndex < 0) historyIndex = -1;
+      if (historyIndex >= history.length) historyIndex = history.length - 1;
+      if (historyIndex === -1) {
+        cmdline.innerText = '';
+      } else {
+        cmdline.innerText = history[historyIndex];
+        placeCaretAtEnd(cmdline);
+      }
+    }
+
+    function placeCaretAtEnd(el) {
+      el.focus();
+      document.execCommand('selectAll', false, null);
+      document.getSelection().collapseToEnd();
+    }
+
+    /* -----------------------
+       Focus for immediate typing
+       ----------------------- */
+    function focusInputNow() {
+      if (!cmdline || !cmdline.isConnected) return;
+      cmdline.focus();
+      const sel = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(cmdline);
+      range.collapse(false);
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+    window.addEventListener('DOMContentLoaded', focusInputNow);
+    window.addEventListener('load', focusInputNow);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) focusInputNow(); });
+
+    // keyboard shortcuts: ctrl+l clears
+    document.addEventListener('keydown',(e)=>{
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'l') {
+        e.preventDefault();
+        cmd_clear();
+      }
+    });
+
+    /* -----------------------
+       Utility: escape HTML for safer output
+       ----------------------- */
+    // Already implemented escapeHtml
+
+    /* -----------------------
+       End
+       ----------------------- */
+
+  </script>
 </body>
 </html>
-<!--<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Mihir Kulkarni</title>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-      background: #121212;
-      color: #e5e5e5;
-    }
-    
-    details {
-      margin: 0.5rem 0;
-      padding: 0.5rem;
-      border-radius: 0.5rem;
-      background: rgba(255, 255, 255, 0.05);
-    }
-    
-    summary {
-      cursor: pointer;
-      padding: 0.5rem;
-      border-radius: 0.25rem;
-      transition: background 0.2s;
-    }
-    
-    summary:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-    
-    .resource {
-      padding: 0.5rem 1rem;
-      margin: 0.25rem 0;
-    }
-    
-    a {
-      color: #60a5fa;
-      text-decoration: none;
-    }
-    
-    a:hover {
-      text-decoration: underline;
-    }
-    
-    .button {
-      display: inline-block;
-      padding: 0.5rem 1rem;
-      margin: 1rem 0;
-      background: #60a5fa;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 0.25rem;
-      transition: background 0.2s;
-    }
-    
-    .button:hover {
-      background: #3b82f6;
-    }
-
-    form label {
-      display: block; 
-      margin-bottom: 0.5rem; 
-    }
-
-    form input[type="email"],
-    form textarea {
-      width: 100%; 
-      padding: 0.5rem; 
-      margin-top: 0.25rem; 
-    }
-
-    button[type="submit"] {
-      padding: 0.5rem 1rem; 
-      background: #60a5fa; 
-      color: #fff; 
-      border: none; 
-      border-radius: 0.25rem; 
-      cursor: pointer; 
-      transition: background 0.2s; 
-    }
-
-    @media (max-width: 600px) {
-      body {
-        max-width: 100%;
-        margin: 1rem;
-        padding: 0.5rem;
-      }
-      
-      .resource {
-        padding: 0.5rem;
-      }
-      
-      .button {
-        width: 100%;
-        text-align: center;
-      }
-    }
-
-    footer {
-      text-align: center;
-      font-size: 0.75rem;
-      color: #888;
-      font-family: 'Courier New', Courier, monospace;
-      margin-top: 2rem;
-    }
-  </style>
-</head>
-<body>
-  <h1>Mihir Kulkarni</h1>
-  
-  <details>
-    <summary aria-expanded="false">About</summary>
-    <div class="resource" style="display: flex; align-items: center;">
-      <!--<img src="profile.png" alt="Mihir Kulkarni" style="width: 125px; height: 150px; border-radius: 0.5rem; margin-right: 1rem;">
-      <p style="flex: 1; height: 150px; display: flex; align-items: center;"></p>
-        Hi, I'm Mihir Kulkarni, a passionate software developer with a focus on machine learning and web development. I love creating innovative solutions and sharing my knowledge with the community.<br>
-        sign- 𑘦𑘲𑘮𑘲𑘨𑘿 𑘎𑘳𑘩𑘿𑘎𑘨𑘿𑘡𑘲
-      </p>
-    </div>
-  </details>
-    </div>
-  </details>
-  <details>
-    <summary aria-expanded="false">Projects</summary>
-    <div class="resource">
-      <p>Here are some of my recent projects:</p>
-      <ul>
-        <li>Project 1: Description of project 1.</li>
-        <li>Project 2: Description of project 2.</li>
-        <li>Project 3: Description of project 3.</li>
-      </ul>
-    </div>
-  </details>
-  
-  <details>
-    <summary aria-expanded="false">Socials</summary>
-    <div class="resource">
-      <p>Connect with me on social media:</p>
-      <ul>
-        <li><a href="https://www.linkedin.com/in/mihirkula" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-        <li><a href="https://twitter.com/mihirkulaa" target="_blank" rel="noopener noreferrer">X.com</a></li>
-        <li><a href="https://github.com/mihirkulaa" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-        <li><a href="https://mihirkulaa.substack.com" target="_blank" rel="noopener noreferrer">Substack</a></li>
-      </ul>
-    </div>
-  </details>
-
-  <details>
-    <summary aria-expanded="false">Contact</summary>
-    <div class="resource">
-      <form action="https://formspree.io/f/xeoopnbe" method="POST">
-        <label>Your email:
-          <input type="email" name="email" required placeholder="Enter your email">
-        </label>
-        <label>Your message:
-          <textarea name="message" required placeholder="Type your message here"></textarea>
-        </label>
-        <button type="submit">Send</button>
-      </form>
-    </div>
-  </details>
-
-  <details>
-    <summary aria-expanded="false">Blog</summary>
-    <div class="resource">
-     <p><a href="https://mihirkulaa.substack.com" target="_blank" rel="noopener noreferrer">Subscribe to my blog</a></p>
-     <div id="custom-substack-embed"></div>
-     <script>
-     window.CustomSubstackWidget = {
-       substackUrl: "mihirkulaa.substack.com",
-       placeholder: "example@gmail.com",
-       buttonText: "Subscribe",
-       theme: "custom",
-       colors: {
-       primary: "#000000",
-       input: "#FFFFFF",
-       email: "#000000",
-       text: "#FFFFFF",
-       },
-     };
-     </script>
-     <script src="https://substackapi.com/widget.js" async></script>
-     </div>
-    </details>
-
-  <div class="resource">
-     <a href="resume.pdf" class="button" download>Download Resume</a>
-   </div>
-
-   <footer>
-     &copy; 2025 𑘦𑘲𑘮𑘲𑘨𑘿 𑘎𑘳𑘩𑘿𑘎𑘨𑘿𑘡𑘲
-   </footer>
-
-</body>
-
-</html> -->
