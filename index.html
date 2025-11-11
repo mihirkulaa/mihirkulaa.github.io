@@ -312,11 +312,13 @@
     }
 
     function cmd_projects() {
-      // Minimal example — replace or expand
+      // Link project entries to the GitHub repositories page for the specified user
+      const githubUser = 'MIHIRKULAA';
+      const repoPage = `https://github.com/${githubUser}?tab=repositories`;
       const list = [
-        {name:'Project Alpha', url:'#'},
-        {name:'Project Beta', url:'#'},
-        {name:'Project Gamma', url:'#'}
+        {name:'Project Alpha', url: repoPage},
+        {name:'Project Beta', url: repoPage},
+        {name:'Project Gamma', url: repoPage}
       ];
       const html = list.map(p => `<div><a class="link" target="_blank" rel="noopener noreferrer" href="${p.url}">${p.name}</a></div>`).join('');
       appendOutput(html);
